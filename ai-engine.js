@@ -80,6 +80,7 @@ class AIEngine {
     } catch (error) {
       console.error('❌ AI Engine initialization failed:', error);
       // Continue without AI - fallback to rule-based
+      throw error; // Re-throw to allow calling code to handle gracefully
     }
   }
 

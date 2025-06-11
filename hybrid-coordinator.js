@@ -283,13 +283,22 @@ class HybridCoordinator {
   }
 
   decideStrategy(complexity) {
+    // Safe check for AI engine availability
+    if (!this.aiEngine || typeof this.aiEngine.getStatus !== 'function') {
+      return {
+        method: 'rule-based-only',
+        reason: 'AI engine not available',
+        confidence: 0.8
+      };
+    }
+    
     const aiStatus = this.aiEngine.getStatus();
     
     // Always use rule-based if AI is not available
     if (!aiStatus.initialized) {
       return {
         method: 'rule-based-only',
-        reason: 'AI not available',
+        reason: 'AI not initialized',
         confidence: 0.8
       };
     }

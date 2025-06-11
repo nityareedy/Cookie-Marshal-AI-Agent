@@ -4,6 +4,12 @@
  * @description Rejects every pesky cookie and kicks 'em to the curb—leaving no crumbs behind, because your browser isn't a bakery.
  * @author Yashwanth Reddy Katipally
  * @license MIT
+ * 
+ * RECENT IMPROVEMENTS:
+ * - Fixed AI engine initialization to prevent "AI not available" errors
+ * - Added safety checks for optional components (PerformanceOptimizer, MultiLanguageDetector)  
+ * - Enhanced error handling with proper fallback mechanisms
+ * - Improved component isolation and timeout protection
  */
 
 /**
@@ -300,20 +306,22 @@
         // Initialize AI engine if available
         if (window.AIEngine) {
           this.aiEngine = new window.AIEngine();
-          console.log('🧠 AI Engine initialized');
+          console.log('🧠 AI Engine created, initializing...');
+          
+          // Wait for AI initialization to complete
+          try {
+            await this.aiEngine.initialize();
+            console.log('✅ AI Engine fully initialized');
+          } catch (error) {
+            console.warn('⚠️ AI initialization failed, continuing with rules only:', error);
+            this.aiEngine = null; // Clear failed AI engine
+          }
         }
         
         // Create hybrid coordinator
         if (window.HybridCoordinator && this.ruleBasedAgent) {
           this.hybridCoordinator = new window.HybridCoordinator(this.ruleBasedAgent, this.aiEngine);
           console.log('🤖 Hybrid Coordinator initialized');
-        }
-        
-        // Initialize AI in background
-        if (this.aiEngine) {
-          this.aiEngine.initialize().catch(error => {
-            console.warn('AI initialization failed, continuing with rules:', error);
-          });
         }
         
         console.log('✅ Anti-Evasion Cookie Killer ready');
@@ -623,14 +631,15 @@
       
       console.log('🔍 Advanced banner scanning...');
       
-      // SAFE ENHANCEMENT: Use optimized scanning if available
+              // SAFE ENHANCEMENT: Use performance-optimized scanning if available
       let banners;
-      if (this.performanceOptimizer) {
+      if (this.performanceOptimizer && typeof this.performanceOptimizer.optimizedScan === 'function') {
         try {
           banners = await this.performanceOptimizer.optimizedScan(
             () => this.findAllCookieBanners(),
             this.performanceOptimizer.generateScanCacheKey()
           );
+          console.log('⚡ Performance-optimized scan completed');
         } catch (error) {
           console.warn('Optimized scan failed, using fallback:', error);
           banners = await this.findAllCookieBanners();
@@ -664,7 +673,7 @@
       const advancedSelectors = this.getAdvancedSelectors();
       
       // SAFE ENHANCEMENT: Use batch queries if available
-      if (this.performanceOptimizer) {
+      if (this.performanceOptimizer && typeof this.performanceOptimizer.batchQuerySelectors === 'function') {
         try {
           const batchResults = this.performanceOptimizer.batchQuerySelectors(advancedSelectors);
           
@@ -1567,7 +1576,7 @@
 
     containsCookieKeywords(content) {
       // SAFE ENHANCEMENT: Use multi-language detection if available
-      if (this.multiLanguageDetector) {
+      if (this.multiLanguageDetector && typeof this.multiLanguageDetector.containsCookieContent === 'function') {
         try {
           const enhancedResult = this.multiLanguageDetector.containsCookieContent(content);
           if (enhancedResult) {
@@ -2146,7 +2155,7 @@
       this.suspiciousPatterns.clear();
       
       // SAFE ENHANCEMENT: Clean up performance optimizer if available
-      if (this.performanceOptimizer) {
+      if (this.performanceOptimizer && typeof this.performanceOptimizer.cleanup === 'function') {
         try {
           this.performanceOptimizer.cleanup();
         } catch (error) {
