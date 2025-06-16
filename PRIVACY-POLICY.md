@@ -517,7 +517,7 @@ NEVER: User Browser → Extension → External Server
 
 If you have any questions about this privacy policy or Cookie Marshal AI Agent's data practices:
 
-**Email**: privacy@cookiemarshal.dev  
+**Email**: yashwanthreddykatipally@gmail.com
 **GitHub**: [Open an issue for public discussion]  
 **Response Time**: Within 48 hours for privacy inquiries
 
